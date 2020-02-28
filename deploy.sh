@@ -9,7 +9,7 @@ cd docs/.vuepress/dist
 
 git init
 git add -A
-git commit -m 'feat: v1.0版本'
+git commit -m 'feat: v2.0版本'
 
 # 如果发布到 https://<USERNAME>.github.io
  git push -f git@github.com:sky-bear/sky-bear.github.io.git master
