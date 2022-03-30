@@ -75,3 +75,65 @@ console.log( string.match(regex) );
 具体形式如下：`(p1|p2|p3)`，其中`p1`,`p2`,`p3`都是子模式， 用`|`管道符分隔，表示其中任意一个
 
 例如： 要匹配`aa`或者`bb`,可以写成 `/aa|bb/`
+
+测试
+```js
+var regex = /good|goodbye/g;
+var string = "goodbye";
+console.log( string.match(regex) );
+// => ["good"]
+```
+```js
+var regex = /goodbye|good/g;
+var string = "goodbye";
+console.log( string.match(regex) );
+// => ["goodbye"]
+```
+
+通过上面测试说明，分支结构也是有惰性的，及当前面的匹配上了，后面的就不在尝试了
+
+### 5. 案例说明
+#### 5.1 匹配16进制颜色值
+要求：
+```js
+#ffbbad
+#Fc01DF
+#FFF
+#ffE
+```
+分析：16进制组成0-9A-Fa-f,组成位数为3位或者6位
+```js
+const regex= /#([0-9a-zA-Z]{3}|[0-9a-zA-Z]{6})/g
+const str='#ffbbad #Fc01DF #FFF #ffE'
+str.match(regex)
+// ["#ffb", "#Fc0", "#FFF", "#ffE"]
+```
+
+#### 5.2 匹配时间
+要求
+```js
+23:59
+ 
+```
+分析：第一位数字0-2 第二位数字 0-3 或者 0-9（第一位不是2时） 第三位数字 0-5 第四位数字 0-9
+
+```js
+const regex = /([01][0-9]|2[0-3]):[0-5][0-9]/g
+const str = '23:59 02:07'
+str.match(regex)
+// ['23:59', '02:07']
+```
+如果要求匹配`7:9`，也就是时分前面的0可以省略
+```js
+const regex = /([0]?[0-9]|[1][0-9]|[2][0-3]):([0]?[0-9]|[1-5][0-9])/g
+const str = '23:59 02:07 7:9'
+str.match(regex)
+//  ['23:5', '02:07', '7:9']
+```
+
+#### 5.3 匹配日期
+要求：
+```
+2017-06-10
+```
+分析： 年 `[0-9]{4}` 月 `[0][0-9]|[1][0-2]` 日 `[0][1-9]|[12][0-9]|[3][01]`
